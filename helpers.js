@@ -23,7 +23,13 @@ function JSONResponse(res, status_code, success, data) {
   });
 };
 
+const asyncHandler = fn => (req, res, next) =>
+  Promise
+    .resolve(fn(req, res, next))
+    .catch(next)
+
 module.exports = {
   HTTP_STATUS_CODES,
-  JSONResponse
+  JSONResponse,
+  asyncHandler
 }
