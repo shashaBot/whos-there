@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path')
 
-const passport = require('passport');
+const passport = require('../config/passport')(require('passport'));
 const validator = require('validator');
 const User = require('../models/User');
 const { JSONResponse } = require('../helpers');
@@ -117,7 +117,7 @@ router.post('/signup', (req, res, next) => {
  * GET /account
  * Profile page.
  */
-router.get('/account', (req, res) => {
+router.get('/account', passport.isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '../public/manage-account.html'))
 });
 
@@ -125,7 +125,7 @@ router.get('/account', (req, res) => {
  * PUT /account/profile
  * Update profile information.
  */
-router.put('/account', (req, res, next) => {
+router.put('/account', passport.isAuthenticated, (req, res, next) => {
   const validationErrors = [];
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
 
@@ -159,7 +159,7 @@ router.put('/account', (req, res, next) => {
  * PUT /account/password
  * Update current password.
  */
-router.put('/account/password', (req, res, next) => {
+router.put('/account/password', passport.isAuthenticated, (req, res, next) => {
   const validationErrors = [];
   if (!validator.isLength(req.body.password, { min: 8 })) validationErrors.push({ msg: 'Password must be at least 8 characters long' });
   if (req.body.password !== req.body.confirmPassword) validationErrors.push({ msg: 'Passwords do not match' });
@@ -182,7 +182,7 @@ router.put('/account/password', (req, res, next) => {
  * POST /account-delete
  * Delete user account.
  */
-router.post('/account-delete', (req, res, next) => {
+router.post('/account-delete', passport.isAuthenticated, (req, res, next) => {
   User.deleteOne({ _id: req.user.id }, (err) => {
     if (err) { return next(err); }
     req.logout();

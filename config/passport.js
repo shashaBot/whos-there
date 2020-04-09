@@ -40,5 +40,7 @@ module.exports = (passport) => {
     }
     res.redirect('/login');
   };
+
+  return passport
   
 }
