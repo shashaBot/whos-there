@@ -8,6 +8,9 @@ const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 const dotenv = require('dotenv');
 const passport = require('passport');
+const lusca = require('lusca');
+const compression = require('compression');
+const errorHandler = require('errorhandler');
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -19,6 +22,9 @@ const usersRouter = require('./routes/users');
 const pagesRouter = require('./routes/pages');
 
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views','./views');
 
 /**
  * Connect to MongoDB.
@@ -34,6 +40,11 @@ mongoose.connection.on('error', (err) => {
   process.exit();
 });
 
+app.use(compression());
+app.use(sass({
+  src: path.join(__dirname, 'public'),
+  dest: path.join(__dirname, 'public')
+}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -57,10 +68,26 @@ require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(sass({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public')
-}));
+app.use(lusca.xframe('SAMEORIGIN'));
+app.use(lusca.xssProtection(true));
+app.disable('x-powered-by');
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
+app.use((req, res, next) => {
+  // After successful login, redirect back to the intended page
+  if (!req.user
+    && req.path !== '/login'
+    && req.path !== '/signup'
+    && !req.path.match(/\./)) {
+    req.session.returnTo = req.originalUrl;
+  } else if (req.user
+    && (req.path === '/account')) {
+    req.session.returnTo = req.originalUrl;
+  }
+  next();
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/javascripts/lib', express.static(path.join(__dirname, 'node_modules/socket.io-client/dist'), { maxAge: 31557600000 }));
@@ -77,4 +104,18 @@ app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use('/page', (req, res) => res.sendFile(path.join(__dirname, 'public/page.html')));
 app.use('/pages', pagesRouter);
+
+/**
+ * Error Handler.
+ */
+if (process.env.NODE_ENV === 'development') {
+  // only use in development
+  app.use(errorHandler());
+} else {
+  app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).send('Server Error');
+  });
+}
+
 module.exports = app;
