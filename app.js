@@ -1,7 +1,7 @@
 var express = require('express');
 const session = require('express-session');
 var path = require('path');
-var compass = require('node-compass');
+var sass = require('node-sass-middleware');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
@@ -56,14 +56,19 @@ require('./config/passport')(passport)
 app.use(passport.initialize());
 app.use(passport.session());
 
-if(!process.env.HEROKU || process.env.HEROKU.toLowerCase() !== 'true') {
-  // Heroku app crashes as it does not support node-sass.
-  // TODO: Find a buildpack or configuration that'll support this.
-  // We'll push .css files to heroku deployments instead of serving sass using node-compass till then.
-  app.use(compass({ mode: 'expanded' }));
-}
+app.use(sass({
+  src: path.join(__dirname, 'public'),
+  dest: path.join(__dirname, 'public')
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/javascripts/lib', express.static(path.join(__dirname, 'node_modules/socket.io-client/dist'), { maxAge: 31557600000 }));
+app.use('/javascripts/lib', express.static(path.join(__dirname, 'node_modules/chart.js/dist'), { maxAge: 31557600000 }));
+app.use('/javascripts/lib', express.static(path.join(__dirname, 'node_modules/popper.js/dist/umd'), { maxAge: 31557600000 }));
+app.use('/javascripts/lib', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js'), { maxAge: 31557600000 }));
+app.use('/javascripts/lib', express.static(path.join(__dirname, 'node_modules/jquery/dist'), { maxAge: 31557600000 }));
+app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/webfonts'), { maxAge: 31557600000 }));
+
 /**
  * Routing
  */
