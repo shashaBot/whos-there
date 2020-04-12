@@ -76,6 +76,9 @@ web_modules/
 .cache
 .parcel-cache
 
+# sass-cache
+*.sass-cache
+
 # Next.js build output
 .next
 
@@ -113,3 +116,6 @@ dist
 .yarn/unplugged
 .yarn/build-state.yml
 .pnp.*
+
+# miscellaneous
+.DS_Store
