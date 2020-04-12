@@ -1,6 +1,7 @@
 const express = require('express');
+
 const router = express.Router();
-const path = require('path')
+const path = require('path');
 
 const passport = require('../config/passport')(require('passport'));
 const validator = require('validator');
@@ -28,17 +29,17 @@ router.post('/login', (req, res, next) => {
   if (validator.isEmpty(req.body.password)) validationErrors.push({ msg: 'Password cannot be blank.' });
 
   if (validationErrors.length) {
-    let data = {
+    const data = {
       errors: validationErrors
-    }
-    return JSONResponse(res, 'UNAUTHORIZED', false, data)
+    };
+    return JSONResponse(res, 'UNAUTHORIZED', false, data);
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
-      return JSONResponse(res, 'UNAUTHORIZED', false, { msg: info })
+      return JSONResponse(res, 'UNAUTHORIZED', false, { msg: info });
     }
     req.logIn(user, (err) => {
       if (err) { return next(err); }
@@ -56,7 +57,7 @@ router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) console.log('Error : Failed to destroy the session during logout.', err);
     req.user = null;
-    res.redirect('/login?msg='+encodeURIComponent('Logged out successfully!'));
+    res.redirect(`/login?msg=${encodeURIComponent('Logged out successfully!')}`);
   });
 });
 
@@ -78,15 +79,14 @@ router.get('/signup', (req, res) => {
 router.post('/signup', (req, res, next) => {
   const validationErrors = [];
   if (!(req.body.email && req.body.password && req.body.confirmPassword)) {
-    validationErrors.push({ msg: "Some required fields are missing!"})
-  }
-  else {
+    validationErrors.push({ msg: 'Some required fields are missing!' });
+  } else {
     if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
     if (!validator.isLength(req.body.password, { min: 8 })) validationErrors.push({ msg: 'Password must be at least 8 characters long' });
-    if (req.body.password !== req.body.confirmPassword) validationErrors.push({ msg: 'Passwords do not match' });  
+    if (req.body.password !== req.body.confirmPassword) validationErrors.push({ msg: 'Passwords do not match' });
   }
   if (validationErrors.length) {
-    return JSONResponse(res, 'BAD_REQUEST', false, { errors: validationErrors })
+    return JSONResponse(res, 'BAD_REQUEST', false, { errors: validationErrors });
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
@@ -106,8 +106,8 @@ router.post('/signup', (req, res, next) => {
         if (err) {
           return next(err);
         }
-        let msg = 'Account created successfully!'
-        res.redirect('/?msg='+encodeURIComponent(msg));
+        const msg = 'Account created successfully!';
+        res.redirect(`/?msg=${encodeURIComponent(msg)}`);
       });
     });
   });
@@ -118,7 +118,7 @@ router.post('/signup', (req, res, next) => {
  * Profile page.
  */
 router.get('/account', passport.isAuthenticated, (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/manage-account.html'))
+  res.sendFile(path.join(__dirname, '../public/manage-account.html'));
 });
 
 /**
@@ -130,7 +130,7 @@ router.put('/account', passport.isAuthenticated, (req, res, next) => {
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
 
   if (validationErrors.length) {
-    return JSONResponse(res, 'BAD_REQUEST', false, { errors: validationErrors })
+    return JSONResponse(res, 'BAD_REQUEST', false, { errors: validationErrors });
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
@@ -145,12 +145,12 @@ router.put('/account', passport.isAuthenticated, (req, res, next) => {
     user.save((err) => {
       if (err) {
         if (err.code === 11000) {
-          msg='The email address you have entered is already associated with an account.';
-          return 
+          const msg = 'The email address you have entered is already associated with an account.';
+          return;
         }
         return next(err);
       }
-      return JSONResponse(res, 'SUCCESS', true, { msg: 'Profile updated successfully!'})
+      return JSONResponse(res, 'SUCCESS', true, { msg: 'Profile updated successfully!' });
     });
   });
 });
@@ -165,7 +165,7 @@ router.put('/account/password', passport.isAuthenticated, (req, res, next) => {
   if (req.body.password !== req.body.confirmPassword) validationErrors.push({ msg: 'Passwords do not match' });
 
   if (validationErrors.length) {
-    return JSONResponse(res, 'BAD_REQUEST', false, { errors: validationErrors })
+    return JSONResponse(res, 'BAD_REQUEST', false, { errors: validationErrors });
   }
 
   User.findById(req.user.id, (err, user) => {
@@ -173,7 +173,7 @@ router.put('/account/password', passport.isAuthenticated, (req, res, next) => {
     user.password = req.body.password;
     user.save((err) => {
       if (err) { return next(err); }
-      return JSONResponse(res, 'SUCCESS', true, { msg : 'Password has been changed.' });
+      return JSONResponse(res, 'SUCCESS', true, { msg: 'Password has been changed.' });
     });
   });
 });
@@ -186,8 +186,13 @@ router.post('/account-delete', passport.isAuthenticated, (req, res, next) => {
   User.deleteOne({ _id: req.user.id }, (err) => {
     if (err) { return next(err); }
     req.logout();
-    res.redirect('/?msg='+encodeURIComponent('Your account has been deleted.'));
+    res.redirect(`/?msg=${encodeURIComponent('Your account has been deleted.')}`);
   });
+});
+
+router.get('/users/', (req, res, next) => {
+  const { userIds } = req.query;
+  User.find({ id: { $in: userIds } }, (err, users) => JSONResponse(res, 'SUCCESS', true, { users }));
 });
 
 module.exports = router;

@@ -1,17 +1,17 @@
-const User = require('../models/User');
 const LocalStrategy = require('passport-local');
+const User = require('../models/User');
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
     done(null, user.id);
   });
-  
+
   passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => {
       done(err, user);
     });
   });
-  
+
   /**
    * Sign in using Email and Password.
    */
@@ -30,7 +30,7 @@ module.exports = (passport) => {
       });
     });
   }));
-  
+
   /**
    * Login Required middleware.
    */
@@ -38,9 +38,8 @@ module.exports = (passport) => {
     if (req.isAuthenticated()) {
       return next();
     }
-    res.redirect('/login');
+    res.redirect(`/login?msg=${encodeURIComponent('Please login to continue.')}`);
   };
 
-  return passport
-  
-}
+  return passport;
+};

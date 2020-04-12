@@ -1,9 +1,9 @@
-var express = require('express');
+const express = require('express');
 const session = require('express-session');
-var path = require('path');
-var sass = require('node-sass-middleware');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const path = require('path');
+const sass = require('node-sass-middleware');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 const dotenv = require('dotenv');
@@ -14,11 +14,11 @@ const passport = require('passport');
  */
 dotenv.config({ path: '.env' });
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var pagesRouter = require('./routes/pages');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const pagesRouter = require('./routes/pages');
 
-var app = express();
+const app = express();
 
 /**
  * Connect to MongoDB.
@@ -52,7 +52,8 @@ app.use(session({
 /**
  * Initialize passport
  */
-require('./config/passport')(passport)
+require('./config/passport')(passport);
+
 app.use(passport.initialize());
 app.use(passport.session());
 

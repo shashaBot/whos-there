@@ -13,7 +13,7 @@ const viewLogSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Page'
   }
-})
+});
 
 const ViewLog = mongoose.model('ViewLog', viewLogSchema);
 
