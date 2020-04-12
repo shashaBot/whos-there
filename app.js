@@ -56,14 +56,19 @@ require('./config/passport')(passport)
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(compass({ mode: 'expanded' }));
+if(!process.env.HEROKU || process.env.HEROKU.toLowerCase() !== 'true') {
+  // Heroku app crashes as it does not support node-sass.
+  // TODO: Find a buildpack or configuration that'll support this.
+  // We'll push .css files to heroku deployments instead of serving sass using node-compass till then.
+  app.use(compass({ mode: 'expanded' }));
+}
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use('/javascripts/lib', express.static(path.join(__dirname, 'node_modules/socket.io-client/dist'), { maxAge: 31557600000 }));
 /**
  * Routing
  */
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', usersRouter);
 app.use('/page', (req, res) => res.sendFile(path.join(__dirname, 'public/page.html')));
 app.use('/pages', pagesRouter);
 module.exports = app;
