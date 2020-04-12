@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
 const mongoose = require('mongoose');
 
 const pageSchema = new mongoose.Schema({
@@ -11,12 +9,7 @@ const pageSchema = new mongoose.Schema({
   sharedWith: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }],
-  lastViewedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  lastViewerdAt: Date
+  }]
 }, 
 {
   timestamps: true
