@@ -1,0 +1,531 @@
+{
+	"info": {
+		"_postman_id": "e63f44a8-91f5-47b6-96d2-bb7ff5a606b5",
+		"name": "whos-there",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "account",
+			"item": [
+				{
+					"name": "Signup post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"shashwat@gulyani.co\",\n\t\"password\": \"2*skldjfs\",\n\t\"confirmPassword\": \"2*skldjfs\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/signup",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"signup"
+							]
+						},
+						"description": "Register user"
+					},
+					"response": []
+				},
+				{
+					"name": "Login post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"shashwat@gulyani.co\",\n\t\"password\": \"2*skldjfs\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/login",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET account",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/account",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"shashwat@gulyani.co\",\n\t\"password\": \"2*skldjfs\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/logout",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "pages",
+			"item": [
+				{
+					"name": "GET Pages",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/pages/",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"pages",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GET Pages",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local}}/pages/",
+									"host": [
+										"{{local}}"
+									],
+									"path": [
+										"pages",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "718"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2ce-Em4VXRseePAbSul92v+UfydOKuw\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 11 Apr 2020 07:21:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"status\": \"Success\",\n    \"code\": 200,\n    \"data\": {\n        \"pages\": [\n            {\n                \"sharedWith\": [\n                    \"5e916ddca1a00406754d6e60\"\n                ],\n                \"_id\": \"5e916f5cc79371071137da03\",\n                \"name\": \"Testing3\",\n                \"creator\": \"5e916ddca1a00406754d6e60\",\n                \"createdAt\": \"2020-04-11T07:18:52.492Z\",\n                \"updatedAt\": \"2020-04-11T07:18:52.492Z\",\n                \"__v\": 0\n            },\n            {\n                \"sharedWith\": [\n                    \"5e916ddca1a00406754d6e60\"\n                ],\n                \"_id\": \"5e916f700588020725b104e5\",\n                \"name\": \"Testing3\",\n                \"creator\": \"5e916ddca1a00406754d6e60\",\n                \"createdAt\": \"2020-04-11T07:19:12.022Z\",\n                \"updatedAt\": \"2020-04-11T07:19:12.022Z\",\n                \"__v\": 0\n            },\n            {\n                \"sharedWith\": [\n                    \"5e916ddca1a00406754d6e60\"\n                ],\n                \"_id\": \"5e916fbf0588020725b104e6\",\n                \"name\": \"Testing\",\n                \"creator\": \"5e916ddca1a00406754d6e60\",\n                \"createdAt\": \"2020-04-11T07:20:31.038Z\",\n                \"updatedAt\": \"2020-04-11T07:20:31.038Z\",\n                \"__v\": 0\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "POST Pages",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Testing\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/pages/",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"pages",
+								""
+							]
+						},
+						"description": "Create a page"
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Pages",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sharedWith\": [\n\t\t\"5e8e254e56a8c513d1e195eb\",\n\t\t\"5e8e2ed078e6473d931e802a\"\n\t\t]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/pages/5e916fbf0588020725b104e6",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"pages",
+								"5e916fbf0588020725b104e6"
+							]
+						},
+						"description": "Update page sharing settings"
+					},
+					"response": [
+						{
+							"name": "GET Pages",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local}}/pages/",
+									"host": [
+										"{{local}}"
+									],
+									"path": [
+										"pages",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "718"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2ce-Em4VXRseePAbSul92v+UfydOKuw\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 11 Apr 2020 07:21:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"status\": \"Success\",\n    \"code\": 200,\n    \"data\": {\n        \"pages\": [\n            {\n                \"sharedWith\": [\n                    \"5e916ddca1a00406754d6e60\"\n                ],\n                \"_id\": \"5e916f5cc79371071137da03\",\n                \"name\": \"Testing3\",\n                \"creator\": \"5e916ddca1a00406754d6e60\",\n                \"createdAt\": \"2020-04-11T07:18:52.492Z\",\n                \"updatedAt\": \"2020-04-11T07:18:52.492Z\",\n                \"__v\": 0\n            },\n            {\n                \"sharedWith\": [\n                    \"5e916ddca1a00406754d6e60\"\n                ],\n                \"_id\": \"5e916f700588020725b104e5\",\n                \"name\": \"Testing3\",\n                \"creator\": \"5e916ddca1a00406754d6e60\",\n                \"createdAt\": \"2020-04-11T07:19:12.022Z\",\n                \"updatedAt\": \"2020-04-11T07:19:12.022Z\",\n                \"__v\": 0\n            },\n            {\n                \"sharedWith\": [\n                    \"5e916ddca1a00406754d6e60\"\n                ],\n                \"_id\": \"5e916fbf0588020725b104e6\",\n                \"name\": \"Testing\",\n                \"creator\": \"5e916ddca1a00406754d6e60\",\n                \"createdAt\": \"2020-04-11T07:20:31.038Z\",\n                \"updatedAt\": \"2020-04-11T07:20:31.038Z\",\n                \"__v\": 0\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "GET Page with pageId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/pages/5e916f5cc79371071137da03",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"pages",
+								"5e916f5cc79371071137da03"
+							]
+						},
+						"description": "Get a specific page information using /pages/:pageId"
+					},
+					"response": [
+						{
+							"name": "GET Pages",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local}}/pages/",
+									"host": [
+										"{{local}}"
+									],
+									"path": [
+										"pages",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "718"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2ce-Em4VXRseePAbSul92v+UfydOKuw\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 11 Apr 2020 07:21:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"status\": \"Success\",\n    \"code\": 200,\n    \"data\": {\n        \"pages\": [\n            {\n                \"sharedWith\": [\n                    \"5e916ddca1a00406754d6e60\"\n                ],\n                \"_id\": \"5e916f5cc79371071137da03\",\n                \"name\": \"Testing3\",\n                \"creator\": \"5e916ddca1a00406754d6e60\",\n                \"createdAt\": \"2020-04-11T07:18:52.492Z\",\n                \"updatedAt\": \"2020-04-11T07:18:52.492Z\",\n                \"__v\": 0\n            },\n            {\n                \"sharedWith\": [\n                    \"5e916ddca1a00406754d6e60\"\n                ],\n                \"_id\": \"5e916f700588020725b104e5\",\n                \"name\": \"Testing3\",\n                \"creator\": \"5e916ddca1a00406754d6e60\",\n                \"createdAt\": \"2020-04-11T07:19:12.022Z\",\n                \"updatedAt\": \"2020-04-11T07:19:12.022Z\",\n                \"__v\": 0\n            },\n            {\n                \"sharedWith\": [\n                    \"5e916ddca1a00406754d6e60\"\n                ],\n                \"_id\": \"5e916fbf0588020725b104e6\",\n                \"name\": \"Testing\",\n                \"creator\": \"5e916ddca1a00406754d6e60\",\n                \"createdAt\": \"2020-04-11T07:20:31.038Z\",\n                \"updatedAt\": \"2020-04-11T07:20:31.038Z\",\n                \"__v\": 0\n            }\n        ]\n    }\n}"
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "0ee9db88-5f97-4071-be2e-6e5d0227e382",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7cc8e979-2177-4d92-bdb0-1aabfb5183e7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "d7d3d5d2-c978-451d-bbb4-029206333531",
+			"key": "local",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
