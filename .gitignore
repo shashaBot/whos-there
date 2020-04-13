@@ -117,5 +117,8 @@ dist
 .yarn/build-state.yml
 .pnp.*
 
+# css build
+style.css
+
 # miscellaneous
 .DS_Store
