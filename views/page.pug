@@ -8,6 +8,10 @@ block content
     data-avatars=JSON.stringify([]),
     data-name-field="name",
     data-img-field="picture")
+  
+  ul
+    each log in viewLogs
+      li #{log.viewer.profile.name || log.viewer.email } last viewed page at #{log.viewedAt}
 
   script(src='/javascripts/lib/socket.io.js')
   script(src='/javascripts/avatarList.js')

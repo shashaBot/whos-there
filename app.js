@@ -100,6 +100,9 @@ app.use((req, res, next) => {
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use('/pages', pagesRouter);
+app.use('/404', (req, res) => {
+  res.render('404', { title: 'Not Found'})
+})
 
 /**
  * Static assets

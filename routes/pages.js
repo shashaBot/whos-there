@@ -20,9 +20,17 @@ const passport = require('../config/passport')(require('passport'));
  */
 async function isSharedWith(req, res, next) {
   // Allow user to view page if they are the creator or the page is shared with them
+  const { pageId } = req.params
+  try {
+    pageId = ObjectId(pageId)
+  }
+  catch(e) {
+    req.flash('errors', { msg: 'The page you\'re looking for doesn\'t exist.'})
+    return res.redirect('/404');
+  }
   const page = await Page.findOne({
     $and: [
-      { _id: ObjectId(req.params.pageId) },
+      { _id: pageId },
       {
         $or: [
           { sharedWith: req.user._id },
@@ -31,7 +39,8 @@ async function isSharedWith(req, res, next) {
     ]
   }).exec();
   if (!page) {
-    throw new Error('Unauthorized');
+    req.flash('errors', { msg: 'The page either doesn\'t exist or you don\'t have access to it.'});
+    res.redirect('/404');
   }
   req.page = page;
   return next();
@@ -46,13 +55,22 @@ async function isSharedWith(req, res, next) {
  * @param {Express.next} next
  */
 async function isCreator(req, res, next) {
+  const { pageId } = req.params
+  try {
+    pageId = ObjectId(pageId)
+  }
+  catch(e) {
+    req.flash('errors', { msg: 'The page you\'re looking for doesn\'t exist.'})
+    return res.redirect('/404');
+  }
   const page = await Page.findOne({
-    _id: ObjectId(req.params.pageId),
+    _id: pageId,
     creator: ObjectId(req.user.id)
   })
     .exec();
   if (!page) {
-    return res.redirect(`/unauthorized.html?msg=${encodeURIComponent('The page you are trying to view either does not exist or you do not have access to it.')}`);
+    req.flash('errors', { msg: 'The page either doesn\'t exist or you don\'t have access to it.'});
+    res.redirect('/404');
   }
   req.page = page;
   return next();
@@ -94,9 +112,12 @@ router.get('/new', passport.isAuthenticated, asyncHandler(async (req, res) => {
  * GET a specific Page with id "pageId"
  */
 router.get('/:pageId', [passport.isAuthenticated, asyncHandler(isSharedWith), asyncHandler(markViewed)], asyncHandler(async (req, res, next) => {
+  const viewLogs = await ViewLog.find({ page: req.page.id })
+    .populate('viewer').exec();
   res.render('page', {
     title: req.page.name,
-    page: req.page
+    page: req.page,
+    viewLogs
   });
 }));
 
