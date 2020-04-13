@@ -6,7 +6,6 @@ const path = require('path');
 const passport = require('../config/passport')(require('passport'));
 const validator = require('validator');
 const User = require('../models/User');
-const { JSONResponse } = require('../helpers');
 
 /**
  * GET /login
@@ -34,14 +33,15 @@ router.post('/login', (req, res, next) => {
     const data = {
       errors: validationErrors
     };
-    return JSONResponse(res, 'UNAUTHORIZED', false, data);
+    res.flash('Validation errors');
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
-      return JSONResponse(res, 'UNAUTHORIZED', false, { msg: info });
+      req.flash('errors', info);
+      return res.redirect('/login');
     }
     req.logIn(user, (err) => {
       if (err) { return next(err); }
@@ -90,7 +90,8 @@ router.post('/signup', (req, res, next) => {
     if (req.body.password !== req.body.confirmPassword) validationErrors.push({ msg: 'Passwords do not match' });
   }
   if (validationErrors.length) {
-    return JSONResponse(res, 'BAD_REQUEST', false, { errors: validationErrors });
+    req.flash('errors', validationErrors);
+    return res.redirect('/signup');
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
@@ -102,7 +103,8 @@ router.post('/signup', (req, res, next) => {
   User.findOne({ email: req.body.email }, (err, existingUser) => {
     if (err) { return next(err); }
     if (existingUser) {
-      return JSONResponse(res, 'BAD_REQUEST', false, { msg: 'Account with that email address already exists.' });
+      req.flash('errors', { msg: 'Account with that email address already exists.' });
+      return res.redirect('/signup');
     }
     user.save((err) => {
       if (err) { return next(err); }
@@ -124,7 +126,8 @@ router.post('/signup', (req, res, next) => {
 router.get('/account', passport.isAuthenticated, (req, res) => {
   res.render('account/profile', {
     title: 'Account Management'
-  });});
+  });
+});
 
 /**
  * PUT /account/profile
@@ -135,7 +138,8 @@ router.put('/account', passport.isAuthenticated, (req, res, next) => {
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
 
   if (validationErrors.length) {
-    return JSONResponse(res, 'BAD_REQUEST', false, { errors: validationErrors });
+    req.flash('errors', validationErrors);
+    return res.redirect('/account');
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
@@ -150,12 +154,13 @@ router.put('/account', passport.isAuthenticated, (req, res, next) => {
     user.save((err) => {
       if (err) {
         if (err.code === 11000) {
-          const msg = 'The email address you have entered is already associated with an account.';
-          return;
+          req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
+          return res.redirect('/account');
         }
         return next(err);
       }
-      return JSONResponse(res, 'SUCCESS', true, { msg: 'Profile updated successfully!' });
+      req.flash('success', { msg: 'Profile information has been updated.' });
+      res.redirect('/account');
     });
   });
 });
@@ -170,7 +175,8 @@ router.put('/account/password', passport.isAuthenticated, (req, res, next) => {
   if (req.body.password !== req.body.confirmPassword) validationErrors.push({ msg: 'Passwords do not match' });
 
   if (validationErrors.length) {
-    return JSONResponse(res, 'BAD_REQUEST', false, { errors: validationErrors });
+    req.flash('errors', validationErrors);
+    return res.redirect('/account');
   }
 
   User.findById(req.user.id, (err, user) => {
@@ -178,7 +184,8 @@ router.put('/account/password', passport.isAuthenticated, (req, res, next) => {
     user.password = req.body.password;
     user.save((err) => {
       if (err) { return next(err); }
-      return JSONResponse(res, 'SUCCESS', true, { msg: 'Password has been changed.' });
+      req.flash('success', { msg: 'Password has been changed.' });
+      res.redirect('/account');
     });
   });
 });
@@ -191,7 +198,7 @@ router.post('/account-delete', passport.isAuthenticated, (req, res, next) => {
   User.deleteOne({ _id: req.user.id }, (err) => {
     if (err) { return next(err); }
     req.logout();
-    res.redirect(`/?msg=${encodeURIComponent('Your account has been deleted.')}`);
+    req.flash('info', { msg: 'Your account has been deleted.' });
   });
 });
 

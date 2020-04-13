@@ -90,7 +90,7 @@ router.post('/', passport.isAuthenticated, asyncHandler(async (req, res, next) =
     sharedWith: [req.user.id, ...(req.body.sharedWith || [])]
   });
   await page.save();
-  res.flash('Page created successfully!');
+  req.flash('success', { msg: 'Page created successfully!' });
   return res.redirect(`/pages/${page.id}`);
 }));
 
