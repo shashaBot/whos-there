@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1 Your Pages
+  p.lead Create pages and view them together
+  hr
+  .row
+    .col-md-10.col-md-offset-2
+      a.btn.btn-secondary.btn-lg.mb-3(href="/pages/new") Create New Page
+      .list-group
+      each page in pages
+        a.list-group-item.list-group-item-action.flex-colum.align-items-start(href=`pages/${page.id}`)
+          .d-flex.w-100.justify-content-between
+            h5.mb-1 #{page.name}
+            small
+              Created #{page.createdAt}
+          p.mb-1.
+            Shared with #{page.sharedWith}
+          small
+            Created by #{page.creator}
+          a(href=`/pages/edit/${page.id.toString()}`).pull-right.btn.btn-default.btn-sm
+            i.fa.fa-toolbox
