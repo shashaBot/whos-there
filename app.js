@@ -97,7 +97,6 @@ app.use((req, res, next) => {
  */
 app.use('/', indexRouter);
 app.use('/', usersRouter);
-app.use('/page', (req, res) => res.sendFile(path.join(__dirname, 'public/page.html')));
 app.use('/pages', pagesRouter);
 
 /**
