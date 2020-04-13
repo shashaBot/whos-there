@@ -59,7 +59,7 @@ router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) console.log('Error : Failed to destroy the session during logout.', err);
     req.user = null;
-    res.redirect(`/login?msg=${encodeURIComponent('Logged out successfully!')}`);
+    res.redirect('/');
   });
 });
 
@@ -130,10 +130,10 @@ router.get('/account', passport.isAuthenticated, (req, res) => {
 });
 
 /**
- * PUT /account/profile
+ * POST /account/profile
  * Update profile information.
  */
-router.put('/account', passport.isAuthenticated, (req, res, next) => {
+router.post('/account/profile', passport.isAuthenticated, (req, res, next) => {
   const validationErrors = [];
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
 
