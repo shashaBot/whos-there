@@ -11,7 +11,8 @@ const passport = require('passport');
 const lusca = require('lusca');
 const compression = require('compression');
 const errorHandler = require('errorhandler');
-
+const flash = require('express-flash');
+const chalk = require('chalk');
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
@@ -24,7 +25,7 @@ const pagesRouter = require('./routes/pages');
 const app = express();
 
 app.set('view engine', 'pug');
-app.set('views','./views');
+app.set('views', './views');
 
 /**
  * Connect to MongoDB.
@@ -67,6 +68,8 @@ require('./config/passport')(passport);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(flash());
 
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));

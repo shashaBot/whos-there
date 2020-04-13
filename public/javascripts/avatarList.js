@@ -1,32 +1,36 @@
+/* eslint-env jquery, browser */
+
 function updateAvatars(rootEl) {
-  let { avatars, nameField, imgField, avatarClass } = rootEl.dataset;
-  avatars = JSON.parse(avatars);
-  rootEl.innerHTML = "";
-  for (let avatar of avatars) {
-    console.log('avatar', avatar);
-    let avatarEl = document.createElement('a');
+  const {
+    nameField, imgField, avatarClass
+  } = rootEl.dataset;
+  const avatars = JSON.parse(rootEl.dataset.avatars);
+  rootEl.innerHTML = '';
+  avatars.forEach((avatar) => {
+    const avatarEl = document.createElement('a');
+    avatarEl.id = avatar.id;
     avatarEl.className = avatarClass;
-    avatarEl.style.backgroundImage = "url(" + avatar[imgField] + ")";
+    avatarEl.style.backgroundImage = `url(${avatar[imgField]})`;
     avatarEl.setAttribute('username', avatar[nameField]);
     rootEl.append(avatarEl);
-  }
+  });
 }
 
 function avatarListUpdated(mutationsList) {
-  console.log('mutation: ', mutationsList)
-  for(let m of mutationsList) {
-    if(m.type === 'attributes') {
+  mutationsList.forEach((m) => {
+    if (m.type === 'attributes') {
       if (m.attributeName === 'data-avatars') {
-        updateAvatars(m.target)
+        updateAvatars(m.target);
       }
     }
-  }
+  });
 }
 
-(function () {
-  let root = document.getElementById('avatar_list_root');
-  let observer = new MutationObserver(avatarListUpdated);
+$(document).ready(() => {
+  const root = document.getElementById('avatar_list_root');
+  updateAvatars(root);
+  const observer = new MutationObserver(avatarListUpdated);
   observer.observe(root, {
     attributes: true
-  })
-})();
+  });
+});

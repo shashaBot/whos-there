@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h4.
+    #{page.name}
+  #avatar_list_root.c-profile__list(
+    data-avatar-class="c-profile",
+    data-avatars=JSON.stringify([]),
+    data-name-field="name",
+    data-img-field="picture")
+
+  script(src='/javascripts/lib/socket.io.js')
+  script(src='/javascripts/avatarList.js')
+  script(src='/javascripts/viewers.js')

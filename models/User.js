@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
     location: String,
     website: String,
     picture: String
-  }
+  },
+  socketId: String
 }, { timestamps: true });
 
 /**

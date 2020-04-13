@@ -6,7 +6,6 @@ const passport = require('../config/passport')(require('passport'));
 const Page = require('../models/Page');
 const ViewLog = require('../models/ViewLog');
 const { asyncHandler } = require('../helpers');
-const { JSONResponse } = require('../helpers');
 
 /**
  * Middleware - isSharedWith
@@ -63,17 +62,23 @@ async function markViewed(req, res, next) {
 }
 
 /**
- * GET all pages (that current user can see)
+ * GET Create page form
  */
-router.get('/', passport.isAuthenticated, asyncHandler(async (req, res, next) => {
-  const pages = await Page.find({ sharedWith: ObjectId(req.user.id) }).exec();
-  return JSONResponse(res, 'SUCCESS', true, { pages });
+router.get('/new', passport.isAuthenticated, asyncHandler(async (req, res) => {
+  res.render('create', {
+    title: 'Create New Page'
+  });
 }));
 
 /**
  * GET a specific Page with id "pageId"
  */
-router.get('/:pageId', [passport.isAuthenticated, asyncHandler(isSharedWith), asyncHandler(markViewed)], asyncHandler(async (req, res, next) => JSONResponse(res, 'SUCCESS', true, { page: req.page })));
+router.get('/:pageId', [passport.isAuthenticated, asyncHandler(isSharedWith), asyncHandler(markViewed)], asyncHandler(async (req, res, next) => {
+  res.render('page', {
+    title: req.page.name,
+    page: req.page
+  });
+}));
 
 /**
  * POST Create a page
@@ -85,16 +90,30 @@ router.post('/', passport.isAuthenticated, asyncHandler(async (req, res, next) =
     sharedWith: [req.user.id, ...(req.body.sharedWith || [])]
   });
   await page.save();
-  return res.redirect(`/page?pageId=${encodeURIComponent(page._id)}&msg=${encodeURIComponent('Page created successfully!')}`);
+  res.flash('Page created successfully!');
+  return res.redirect(`/pages/${page.id}`);
 }));
 
 /**
- * PATCH Modify page sharing
+ * GET Edit Page
  */
-router.patch('/:pageId', [passport.isAuthenticated, asyncHandler(isCreator)], asyncHandler(async (req, res, next) => {
+router.get('/edit/:pageId', [passport.isAuthenticated, asyncHandler(isCreator)], asyncHandler(async (req, res) => {
+  res.render('create', {
+    title: req.page.name,
+    page: req.page
+  });
+}));
+
+/**
+ * PUT Modify page
+ */
+router.put('/:pageId', [passport.isAuthenticated, asyncHandler(isCreator)], asyncHandler(async (req, res, next) => {
   req.page.sharedWith = req.body.sharedWith;
+  req.page.name = req.body.name;
   await req.page.save();
-  return JSONResponse(res, 'SUCCESS', true, { msg: 'Sharing settings updated.' });
+  res.render('page', {
+    title: req.page.name
+  });
 }));
 
 module.exports = router;

@@ -16,7 +16,9 @@ router.get('/login', (req, res) => {
   if (req.user) {
     return res.redirect('/');
   }
-  res.sendFile(path.join(__dirname, '../public/login.html'));
+  res.render('account/login', {
+    title: 'Login'
+  });
 });
 
 /**
@@ -69,7 +71,9 @@ router.get('/signup', (req, res) => {
   if (req.user) {
     return res.redirect('/');
   }
-  res.sendFile(path.join(__dirname, '../public/signup.html'));
+  res.render('account/signup', {
+    title: 'Create Account'
+  });
 });
 
 /**
@@ -118,8 +122,9 @@ router.post('/signup', (req, res, next) => {
  * Profile page.
  */
 router.get('/account', passport.isAuthenticated, (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/manage-account.html'));
-});
+  res.render('account/profile', {
+    title: 'Account Management'
+  });});
 
 /**
  * PUT /account/profile
@@ -188,11 +193,6 @@ router.post('/account-delete', passport.isAuthenticated, (req, res, next) => {
     req.logout();
     res.redirect(`/?msg=${encodeURIComponent('Your account has been deleted.')}`);
   });
-});
-
-router.get('/users/', (req, res, next) => {
-  const { userIds } = req.query;
-  User.find({ id: { $in: userIds } }, (err, users) => JSONResponse(res, 'SUCCESS', true, { users }));
 });
 
 module.exports = router;
