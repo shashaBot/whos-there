@@ -7,7 +7,8 @@ const Page = require('../models/Page');
 
 /* GET home page. */
 router.get('/', [passport.isAuthenticated], asyncHandler(async (req, res, next) => {
-  const pages = await Page.find({ sharedWith: req.user.id });
+  const pages = await Page.find({ $or: [{ sharedWith: req.user._id }, { creator: req.user._id }] })
+    .populate('sharedWith').populate('creator').exec();
   res.render('home', {
     title: 'Your Pages',
     pages

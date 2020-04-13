@@ -6,17 +6,19 @@ block content
   hr
   .row
     .col-md-10.col-md-offset-2
-      a.btn.btn-secondary.btn-lg.mb-3(href="/pages/new") Create New Page
+      a.btn.btn-success.btn-lg.mb-3(href="/pages/new") Create New Page
       .list-group
       each page in pages
-        a.list-group-item.list-group-item-action.flex-colum.align-items-start(href=`pages/${page.id}`)
-          .d-flex.w-100.justify-content-between
-            h5.mb-1 #{page.name}
-            small
-              Created #{page.createdAt}
-          p.mb-1.
-            Shared with #{page.sharedWith}
-          small
-            Created by #{page.creator}
-          a(href=`/pages/edit/${page.id.toString()}`).pull-right.btn.btn-default.btn-sm
-            i.fa.fa-toolbox
+        .card.mb-2
+          .card-body
+            .card-title.h3= page.name
+            - const sharedWith = page.sharedWith.map(user => user.profile.name || user.email).join(', ')
+            .card-text(style='white-space:pre; overflow: hidden; text-overflow: ellipsis;')
+              | Shared with: #{sharedWith}
+              | Created by: #{page.creator.profile.name || page.creator.email}
+            .row.mt-2
+              .col-md-1.col-sm-4
+                a(href=`/pages/${page.id}`).btn.btn-primary View
+              if (user.id === page.creator.id)
+                .col-md-1.col-sm-4
+                  a(href=`/pages/edit/${page.id}`).btn.btn-outline-danger Edit

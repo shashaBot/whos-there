@@ -2,16 +2,22 @@ extends layout
 
 block content
   .pb-2.mt-2.mb-4.border-bottom
-    h3 Create Page
+    h3= page ? 'Edit Page' : 'Create Page'
 
-  form(method='POST', action='/pages')
+  form(method='POST', action= (editing === true) ? `/pages/${page.id}` : '/pages')
     input(type='hidden', name='_csrf', value=_csrf)
     .form-group.row
       label(class='col-md-2 col-form-label font-weight-bold', for='name') Title
       .col-md-8
-        input.form-control(type='text', name='name', id='name', autocomplete='name', autofocus, required)
+        input.form-control(type='text', name='name', value=(page ? page.name : ''), id='name', autocomplete='name', autofocus, required)
+    .form-group.row
+      label(class='col-md-2 col-form-label font-weight-bold', for='sharedWith') Shared With:
+      .col-md-8
+        select.selectpicker(multiple, name='sharedWith', id='sharedWith')
+          if users
+            each user in users
+              - const shared = page && (page.sharedWith.indexOf(user.id) > -1)
+              option(value=user.id, selected=shared) #{user.profile.name || user.email}
     .form-group
       .offset-md-2.col-md-8.p-1
-        button.btn.btn-primary(type='submit')
-          i.far.fa-envelope.fa-sm
-          | Send
+        button.btn.btn-primary(type='submit') Save
