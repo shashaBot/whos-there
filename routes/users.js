@@ -114,8 +114,8 @@ router.post('/signup', (req, res, next) => {
         if (err) {
           return next(err);
         }
-        const msg = 'Account created successfully!';
-        res.redirect(`/?msg=${encodeURIComponent(msg)}`);
+        req.flash('success', { msg: 'Account created successfully!' });
+        res.redirect('/');
       });
     });
   });

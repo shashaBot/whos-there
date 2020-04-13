@@ -36,7 +36,7 @@ $(document).ready(() => {
   // notify server about new (current) user
   socket.emit('new-viewer', {
     userId,
-    pageId: window.location.pathname.split('/pages/')[1]
+    pageId
   });
 
   // listen for events to update viewers list

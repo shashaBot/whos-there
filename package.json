@@ -15,9 +15,13 @@
     "postinstall": "npm rebuild node-sass",
     "test": "nyc mocha --timeout=10000 --exit",
     "lint": "eslint \"**/*.js\"",
-    "validate": "npm-run-all --parallel test lint",
-    "precommit": "npm run validate",
-    "prepush": "npm run validate"
+    "validate": "npm-run-all --parallel test lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run validate",
+      "pre-push": "npm run validate"
+    }
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
