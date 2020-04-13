@@ -2,12 +2,20 @@ const request = require('supertest');
 const app = require('../app.js');
 
 describe('GET /', () => {
-  it('should return 200 OK', (done) => {
+  it('should return 302', (done) => {
     request(app)
       .get('/')
-      .expect(200, done);
+      .expect(302, done);
   });
 });
+
+describe('GET /pages/some-page', () => {
+  it('should return 302', (done) => {
+    request(app)
+      .get('/pages/some-page')
+      .expect(302, done);
+  })
+})
 
 describe('GET /login', () => {
   it('should return 200 OK', (done) => {
