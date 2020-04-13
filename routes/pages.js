@@ -20,12 +20,11 @@ const passport = require('../config/passport')(require('passport'));
  */
 async function isSharedWith(req, res, next) {
   // Allow user to view page if they are the creator or the page is shared with them
-  const { pageId } = req.params
+  let { pageId } = req.params;
   try {
-    pageId = ObjectId(pageId)
-  }
-  catch(e) {
-    req.flash('errors', { msg: 'The page you\'re looking for doesn\'t exist.'})
+    pageId = ObjectId(pageId);
+  } catch (e) {
+    req.flash('errors', { msg: 'The page you\'re looking for doesn\'t exist.' });
     return res.redirect('/404');
   }
   const page = await Page.findOne({
@@ -39,7 +38,7 @@ async function isSharedWith(req, res, next) {
     ]
   }).exec();
   if (!page) {
-    req.flash('errors', { msg: 'The page either doesn\'t exist or you don\'t have access to it.'});
+    req.flash('errors', { msg: 'The page either doesn\'t exist or you don\'t have access to it.' });
     res.redirect('/404');
   }
   req.page = page;
@@ -55,12 +54,11 @@ async function isSharedWith(req, res, next) {
  * @param {Express.next} next
  */
 async function isCreator(req, res, next) {
-  const { pageId } = req.params
+  let { pageId } = req.params;
   try {
-    pageId = ObjectId(pageId)
-  }
-  catch(e) {
-    req.flash('errors', { msg: 'The page you\'re looking for doesn\'t exist.'})
+    pageId = ObjectId(pageId);
+  } catch (e) {
+    req.flash('errors', { msg: 'The page you\'re looking for doesn\'t exist.' });
     return res.redirect('/404');
   }
   const page = await Page.findOne({
@@ -69,7 +67,7 @@ async function isCreator(req, res, next) {
   })
     .exec();
   if (!page) {
-    req.flash('errors', { msg: 'The page either doesn\'t exist or you don\'t have access to it.'});
+    req.flash('errors', { msg: 'The page either doesn\'t exist or you don\'t have access to it.' });
     res.redirect('/404');
   }
   req.page = page;
