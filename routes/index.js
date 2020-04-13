@@ -1,6 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
+// eslint-disable-next-line
 const passport = require('../config/passport')(require('passport'));
 const { asyncHandler } = require('../helpers');
 const Page = require('../models/Page');

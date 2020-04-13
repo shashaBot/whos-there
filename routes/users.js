@@ -1,8 +1,10 @@
 const express = require('express');
+const chalk = require('chalk');
+const debug = require('debug')('whos-there:routes:users');
 
 const router = express.Router();
-const path = require('path');
 
+// eslint-disable-next-line
 const passport = require('../config/passport')(require('passport'));
 const validator = require('validator');
 const User = require('../models/User');
@@ -30,10 +32,7 @@ router.post('/login', (req, res, next) => {
   if (validator.isEmpty(req.body.password)) validationErrors.push({ msg: 'Password cannot be blank.' });
 
   if (validationErrors.length) {
-    const data = {
-      errors: validationErrors
-    };
-    res.flash('Validation errors');
+    req.flash('errors', validationErrors);
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
@@ -57,7 +56,10 @@ router.post('/login', (req, res, next) => {
 router.get('/logout', (req, res) => {
   req.logout();
   req.session.destroy((err) => {
-    if (err) console.log('Error : Failed to destroy the session during logout.', err);
+    if (err) {
+      debug(chalk.red(err));
+      debug(chalk.red('Failed to destroy the session during logout.'));
+    }
     req.user = null;
     res.redirect('/');
   });

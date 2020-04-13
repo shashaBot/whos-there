@@ -33,16 +33,17 @@ module.exports = (socketIo, server) => {
           socket.broadcast.to(data.pageId).emit('new-user-update', { user: getUserDetails(user) });
         });
       });
-      socket.on('disconnect', (data) => {
-        User.findOneAndUpdate({ socketId: socket.id }, { socketId: null }, { new: false }, (err, user) => {
-          if (err) throw err;
-          if (!user) return;
-          socket.broadcast.emit('remove-viewer', {
-            user: {
-              id: user.id
-            }
+      socket.on('disconnect', () => {
+        User.findOneAndUpdate({ socketId: socket.id }, { socketId: null }, { new: false },
+          (err, user) => {
+            if (err) throw err;
+            if (!user) return;
+            socket.broadcast.emit('remove-viewer', {
+              user: {
+                id: user.id
+              }
+            });
           });
-        });
       });
     });
 };
