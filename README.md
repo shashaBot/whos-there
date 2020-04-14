@@ -1,6 +1,9 @@
 # Who's There?
 An integrable presence service that tells who else is viewing the current page
 
+## Demo
+![Demo](https://github.com/shashaBot/whos-there/raw/master/demo.gif)
+
 ## API Documentation
 Please go [here](https://documenter.getpostman.com/view/8438600/SzYgSavK) to see the API documentation and examples.
 
