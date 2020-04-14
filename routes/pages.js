@@ -39,7 +39,7 @@ async function isSharedWith(req, res, next) {
   }).exec();
   if (!page) {
     req.flash('errors', { msg: 'The page either doesn\'t exist or you don\'t have access to it.' });
-    res.redirect('/404');
+    return res.redirect('/404');
   }
   req.page = page;
   return next();
@@ -82,7 +82,7 @@ async function isCreator(req, res, next) {
  * @param {Express.next} next
  */
 async function markViewed(req, res, next) {
-  let log = await ViewLog.findOne({ page: req.page._id, viewer: ObjectId(req.user.id) }).exec();
+  let log = await ViewLog.findOne({ page: req.page.id, viewer: ObjectId(req.user.id) }).exec();
   if (log) {
     log.viewedAt = new Date();
   } else {
